@@ -1,0 +1,12 @@
+proxmark3-t55x7-cloning-standalone
+####################################
+Related blog post: http://colligomentis.com/2012/05/09/proxmark3-t55x7-cloning-standalone/
+appmain.c  was downloaded from http://colligomentis.com/wp-content/uploads/2012/05/appmain.c
+Additional files needed: http://www.proxmark.org/files/Various%20Software/PM3_T55x7_v2.zip
+
+
+proxmark3-em410x-autoreplay
+###################################
+A simple sample patch for cmdlfem4x.c to introduce automatic replay of an em410x id tag. See
+http://www.offensive-security.com/offsec/cloning-rfid-tags-with-proxmark-3/ for more details.
+

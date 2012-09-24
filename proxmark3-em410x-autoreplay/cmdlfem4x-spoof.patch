@@ -1,0 +1,52 @@
+--- cmdlfem4x.c	2012-09-21 12:59:53.000000000 +0300
++++ cmdlfem4x-mod.c	2012-09-22 04:01:36.000000000 +0300
+@@ -18,7 +18,7 @@
+ #include "cmddata.h"
+ #include "cmdlf.h"
+ #include "cmdlfem4x.h"
+-
++char global_id[11];
+ static int CmdHelp(const char *Cmd);
+ 
+ /* Read the ID of an EM410x tag.
+@@ -134,6 +134,7 @@
+       {
+         /* Sweet! */
+         PrintAndLog("EM410x Tag ID: %s", id);
++	 sprintf(global_id,"%s",id); // shove the ID into a global variable.
+ 
+         /* Stop any loops */
+         return 1;
+@@ -243,6 +244,19 @@
+   return 0;
+ }
+ 
++int CmdEM410xWatchnSpoof(const char *Cmd)
++{
++  do
++  {
++    CmdLFRead("");
++    CmdSamples("2000");
++  } while ( ! CmdEM410xRead(""));  
++  PrintAndLog("# Replaying : %s",global_id);
++  CmdEM410xSim(global_id);
++  return 0;
++}
++
+ /* Function is equivalent of loread + losamples + em410xread
+  * looped until an EM410x tag is detected */
+ int CmdEM410xWatch(const char *Cmd)
+@@ -429,6 +443,7 @@
+   {"em410xread",  CmdEM410xRead,  1, "[clock rate] -- Extract ID from EM410x tag"},
+   {"em410xsim",   CmdEM410xSim,   0, "<UID> -- Simulate EM410x tag"},
+   {"em410xwatch", CmdEM410xWatch, 0, "Watches for EM410x tags"},
++  {"em410xspoof", CmdEM410xWatchnSpoof, 0, "Watches for an EM410x tag and replays it"},
+   {"em410xwrite", CmdEM410xWrite, 1, "<UID> <'0' T5555> <'1' T55x7> -- Write EM410x UID to T5555(Q5) or T55x7 tag"},
+   {"em4x50read",  CmdEM4x50Read,  1, "Extract data from EM4x50 tag"},
+   {NULL, NULL, 0, NULL}
+@@ -445,3 +460,5 @@
+   CmdsHelp(CommandTable);
+   return 0;
+ }
++
++
